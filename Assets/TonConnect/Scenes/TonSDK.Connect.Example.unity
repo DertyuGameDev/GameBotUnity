@@ -276,6 +276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2f6c3af86e96df48be98f0772e2df84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameManager: {fileID: 1025998331}
   UseSavedWalletIcons: 1
   WalletIcons:
   - {fileID: 21300000, guid: 7486662b87d25f74ca59c889405af3f7, type: 3}
@@ -287,7 +288,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: a82d6bfd20ab4274cac267c7232816fc, type: 3}
   - {fileID: 21300000, guid: 33b0b1a83ceea584a85a4687be3a9e83, type: 3}
   - {fileID: 21300000, guid: 6cea1cf91e063e74eb3dc8404f704529, type: 3}
-  text: {fileID: 0}
   document: {fileID: 764677334}
   walletItem: {fileID: 9197481963319205126, guid: 02754049dfaf3f547892804f4967d87c, type: 3}
   tonConnectHandler: {fileID: 1391746625}
@@ -302,6 +302,7 @@ GameObject:
   - component: {fileID: 1025998330}
   - component: {fileID: 1025998329}
   - component: {fileID: 1025998328}
+  - component: {fileID: 1025998331}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -359,6 +360,31 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1025998331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1025998327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15d41f047e47b274e845f8da65cbba1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  user:
+    id: 
+    chat_id: 0
+    tgid: 0
+    username: 
+    address: 
+    Is_Electricity: 0
+    money: 0
+    profit: 0
+    dateStart: 0
+    dateEnd: 0
+    machines: 
+  document: {fileID: 764677334}
 --- !u!1 &1391746623
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,6 +431,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UseWebWallets: 1
   RestoreConnectionOnAwake: 1
+  jsonURL: 
   ManifestURL: https://dertyugamedev.github.io/manifest.json
   WalletsListSource: 
   WalletsListCacheTTL: 0

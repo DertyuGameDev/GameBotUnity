@@ -16,7 +16,7 @@ public class TonConnectHandler : MonoBehaviour
     public bool RestoreConnectionOnAwake = true;
 
     [Space(4)]
-
+    public string jsonURL;
     [Header("TonConnect Settings")]
     [Tooltip("Url to the manifest with the Dapp metadata that will be displayed in the user's wallet.")]
     public string ManifestURL = "";

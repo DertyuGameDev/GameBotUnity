@@ -12,6 +12,8 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
+    public GameManager GameManager;
+    public static Action disconect;
     [Tooltip("Toggle if you want to use presaved wallet icons. (recommended)")]
     public bool UseSavedWalletIcons = true;
     [Tooltip("Wallet icons. Works only if UseSavedWalletIcons is enabled.")]
@@ -24,25 +26,22 @@ public class UIManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private TonConnectHandler tonConnectHandler;
     
-    private void Awake()
+    private void Start()
     {
+        disconect += Disconect;
         TonConnectHandler.OnProviderStatusChanged += OnProviderStatusChange;
         TonConnectHandler.OnProviderStatusChangedError += OnProviderStatusChangeError;
         DisableWalletInfoButton();
         EnableConnectWalletButton();
-        Bot();
     }
-    public async void Bot()
-    {
-        var botClient = new TelegramBotClient("{7064380081:AAHdQ1JH-Zs6zChPqCyip97DvQ9A1RzzbuQ}");
-        var me = await botClient.GetMeAsync();
-        document.rootVisualElement.Q<Label>("Label").text = $"Hello, World! I am user {me.Id} and my name is {me.FirstName}.";
-    }
+
     private void OnProviderStatusChange(Wallet wallet)
     {
         if(tonConnectHandler.tonConnect.IsConnected)
         {
-            print(wallet.Account.Address);
+            GameManager.AdressWallet = wallet.Account.Address.ToString();
+            GameManager.ConnectWallet();
+            GameManager.TakeAuthorization();
             Debug.Log("Wallet connected. Address: " + wallet.Account.Address + ". Platform: " + wallet.Device.Platform + "," + wallet.Device.AppName + "," + wallet.Device.AppVersion);
             CloseConnectModal();
             DisableConnectWalletButton();
@@ -122,18 +121,28 @@ public class UIManager : MonoBehaviour
         ShowConnectModal();
     }
 
+    public async void Disconect()
+    {
+        EnableConnectWalletButton();
+        DisableWalletInfoButton();
+        tonConnectHandler.RestoreConnectionOnAwake = false;
+        //GameManager.clean();
+        await tonConnectHandler.tonConnect.Disconnect();
+    }
+
     private async void DisconnectWalletButtonClick(ClickEvent clickEvent)
     {
         EnableConnectWalletButton();
         DisableWalletInfoButton();
         tonConnectHandler.RestoreConnectionOnAwake = false;
+        //GameManager.clean();
         await tonConnectHandler.tonConnect.Disconnect();
     }
 
     private async void SendTXModalSendButtonClick(float value)
     {
         string receiverAddress = document.rootVisualElement.Q<TextField>("SendTXModal_Address").value;
-        if(string.IsNullOrEmpty(receiverAddress) || value <= 0) return;
+        //if(string.IsNullOrEmpty(receiverAddress) || value <= 0) return;
 
         Address receiver = new(receiverAddress);
         Coins amount = new(value);
@@ -148,7 +157,7 @@ public class UIManager : MonoBehaviour
         long validUntil = DateTimeOffset.Now.ToUnixTimeSeconds() + 600;
 
         SendTransactionRequest transactionRequest = new SendTransactionRequest(sendTons, validUntil);
-        await tonConnectHandler.tonConnect.SendTransaction(transactionRequest);
+        Console.WriteLine(await tonConnectHandler.tonConnect.SendTransaction(transactionRequest));
     }
 
     #endregion
